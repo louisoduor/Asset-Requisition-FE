@@ -10,11 +10,7 @@ export default {
        
       },
       colors: {
-        'Primary': '',
-        'Secondary': '',
-        'Blue': '',
-        'Red': '',
-        'Text': '',
+        customColor: '#3fa3a6', // Add your custom color
       },
       fontFamily:{
         'body': ['Poppins', 'sans-serif']
