@@ -1,26 +1,25 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
 
-//Login
-import Login from './pages/Login';
+// Login
+import Login from './pages/Login/Login';
 
-//Admin
+// Admin
 import AdminLayout from './pages/Admin/AdminLayout';
-import AdminDashboard from './pages/AdminDashboard';
+import AdminDashboard from './pages/Admin/AdminDashboard';
 import AdminAssets from './pages/Admin/AdminAssets';
 import AdminRequests from './pages/Admin/AdminRequests';
 import AddAsset from './pages/Admin/AddAsset';
 
-//Employee
+// Employee
 import UserLayout from './pages/Employee/UserLayout';
-import UserDashboard from '.pages/Employee/UserDashboard';
+import UserDashboard from './pages/Employee/UserDashboard';
 import MyDetails from './pages/Employee/MyDetails';
-import AvailableAssets from './pages/AvailableAssets';
+import AvailableAssets from './pages/Employee/AvailableAssets';
 import MyRequests from './pages/Employee/MyRequests';
 
-//both
 import Error from './pages/Error';
-import SharedLayout from './pages/SharedLayout';
+
 import ProtectedRoute from './pages/ProtectedRoute';
 
 function App() {
@@ -30,36 +29,33 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<SharedLayout />}>
-          {/* <Route index element={<Home />} />
-          <Route path='about' element={<About />} /> */}
-          <Route path='login' element={<Login setUser={setUser} />} />
-
-          <Route
-            path='dashboard'
-            element={
-              <ProtectedRoute user={user}>
-                {user?.email === adminEmail ? (
-                  <AdminLayout>
-                    <Route path='my-account' element={<MyDetails />} />
-                    <Route path='my-dashboard' element={<AdminDashboard />} />
-                    <Route path='requests' element={<AdminRequests />} />
-                    <Route path='assets' element={<AdminAssets />} />
-                    <Route path='add-asset' element={<AddAsset />} />
-                  </AdminLayout>
-                ) : (
-                  <UserLayout>
-                    <Route path='my-account' element={<MyDetails />} />
-                    <Route path='my-dashboard' element={<UserDashboard/>}/>
-                    <Route path='my-requests' element={<MyRequests />} />
-                    <Route path='assets' element={<AvailableAssets />} />
-                  </UserLayout>
-                )}
-              </ProtectedRoute>
-            }
-          />
-          <Route path='*' element={<Error />} />
-        </Route>
+        <Route path='/' element={<Login setUser={setUser} />} />
+        <Route path='/login' element={<Login setUser={setUser} />} />
+        
+        <Route
+          path='dashboard'
+          element={
+            <ProtectedRoute user={user}>
+              {user?.email === adminEmail ? (
+                <AdminLayout>
+                  <Route path='my-account' element={<MyDetails />} />
+                  <Route path='my-dashboard' element={<AdminDashboard />} />
+                  <Route path='requests' element={<AdminRequests />} />
+                  <Route path='assets' element={<AdminAssets />} />
+                  <Route path='add-asset' element={<AddAsset />} />
+                </AdminLayout>
+              ) : (
+                <UserLayout>
+                  <Route path='my-account' element={<MyDetails />} />
+                  <Route path='my-dashboard' element={<UserDashboard />} />
+                  <Route path='my-requests' element={<MyRequests />} />
+                  <Route path='assets' element={<AvailableAssets />} />
+                </UserLayout>
+              )}
+            </ProtectedRoute>
+          }
+        />
+        <Route path='*' element={<Error />} />
       </Routes>
     </BrowserRouter>
   );
