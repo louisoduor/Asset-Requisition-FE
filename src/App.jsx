@@ -1,35 +1,68 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { useState } from 'react';
+
+//Login
+import Login from './pages/Login';
+
+//Admin
+import AdminLayout from './pages/Admin/AdminLayout';
+import AdminDashboard from './pages/AdminDashboard';
+import AdminAssets from './pages/Admin/AdminAssets';
+import AdminRequests from './pages/Admin/AdminRequests';
+import AddAsset from './pages/Admin/AddAsset';
+
+//Employee
+import UserLayout from './pages/Employee/UserLayout';
+import UserDashboard from '.pages/Employee/UserDashboard';
+import MyDetails from './pages/Employee/MyDetails';
+import AvailableAssets from './pages/AvailableAssets';
+import MyRequests from './pages/Employee/MyRequests';
+
+//both
+import Error from './pages/Error';
+import SharedLayout from './pages/SharedLayout';
+import ProtectedRoute from './pages/ProtectedRoute';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [user, setUser] = useState(null);
+  const adminEmail = 'admin@example.com';
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<SharedLayout />}>
+          {/* <Route index element={<Home />} />
+          <Route path='about' element={<About />} /> */}
+          <Route path='login' element={<Login setUser={setUser} />} />
+
+          <Route
+            path='dashboard'
+            element={
+              <ProtectedRoute user={user}>
+                {user?.email === adminEmail ? (
+                  <AdminLayout>
+                    <Route path='my-account' element={<MyDetails />} />
+                    <Route path='my-dashboard' element={<AdminDashboard />} />
+                    <Route path='requests' element={<AdminRequests />} />
+                    <Route path='assets' element={<AdminAssets />} />
+                    <Route path='add-asset' element={<AddAsset />} />
+                  </AdminLayout>
+                ) : (
+                  <UserLayout>
+                    <Route path='my-account' element={<MyDetails />} />
+                    <Route path='my-dashboard' element={<UserDashboard/>}/>
+                    <Route path='my-requests' element={<MyRequests />} />
+                    <Route path='assets' element={<AvailableAssets />} />
+                  </UserLayout>
+                )}
+              </ProtectedRoute>
+            }
+          />
+          <Route path='*' element={<Error />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
